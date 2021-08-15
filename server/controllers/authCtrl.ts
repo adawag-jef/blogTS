@@ -25,7 +25,7 @@ const authCtrl = {
         password: passwordHash,
       });
 
-      res.json({ msg: "Register successfully", data: newUser });
+      res.json({ stutus: "OK", msg: "Register successfully", data: newUser });
     } catch (err) {
       return res.status(500).json({ msg: err.message });
     }
