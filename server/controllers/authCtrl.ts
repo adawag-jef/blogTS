@@ -2,6 +2,7 @@ import e, { Request, Response } from "express";
 import User from "../models/userModel";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { generateActiveToken } from "../config/generateToken";
 
 const authCtrl = {
   register: async (req: Request, res: Response) => {
@@ -19,13 +20,21 @@ const authCtrl = {
       const passwordHash = await bcrypt.hash(password, 12);
 
       // create new User
-      const newUser = new User({
+      const userObj = {
         name,
         account,
         password: passwordHash,
-      });
+      };
+      const newUser = new User(userObj);
 
-      res.json({ stutus: "OK", msg: "Register successfully", data: newUser });
+      const active_token = generateActiveToken({ userObj });
+
+      res.json({
+        stutus: "OK",
+        msg: "Register successfully",
+        data: newUser,
+        active_token,
+      });
     } catch (err) {
       return res.status(500).json({ msg: err.message });
     }
