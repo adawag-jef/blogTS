@@ -7,22 +7,29 @@ export const validRegister = async (
 ) => {
   const { name, account, password } = req.body;
 
+  //name is required
   if (!name) {
     return res.status(400).json({ msg: "Please add your name." });
-  } else if (name.length > 20) {
+  }
+  //max length
+  else if (name.length > 20) {
     return res.status(400).json({ msg: "Your name is up to 20 chars long." });
   }
 
+  //email or phone number is required
   if (!account) {
     return res
       .status(400)
       .json({ msg: "Please add your email or phone number." });
-  } else if (!validPhone(account) && !validateEmail(account)) {
+  }
+  //validate email or phone number format
+  else if (!validPhone(account) && !validateEmail(account)) {
     return res
       .status(400)
       .json({ msg: "Email or phone number format is incorrect." });
   }
 
+  //min of 6 characters
   if (password.length < 6) {
     return res
       .status(400)
