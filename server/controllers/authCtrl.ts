@@ -3,6 +3,10 @@ import User from "../models/userModel";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { generateActiveToken } from "../config/generateToken";
+import sendEmail from "../config/sendMail";
+import { validateEmail } from "../middleware/valid";
+
+const CLIENT_URL = process.env.BASE_URL;
 
 const authCtrl = {
   register: async (req: Request, res: Response) => {
@@ -20,21 +24,19 @@ const authCtrl = {
       const passwordHash = await bcrypt.hash(password, 12);
 
       // create new User
-      const userObj = {
+      const newUser = {
         name,
         account,
         password: passwordHash,
       };
-      const newUser = new User(userObj);
 
-      const active_token = generateActiveToken({ userObj });
+      const active_token = generateActiveToken({ newUser });
 
-      res.json({
-        stutus: "OK",
-        msg: "Register successfully",
-        data: newUser,
-        active_token,
-      });
+      if (validateEmail(account)) {
+        const url = `${CLIENT_URL}/active/${active_token}`;
+        sendEmail(account, url, "Verify your email address");
+        res.json({ msg: "Success Please check your email." });
+      }
     } catch (err) {
       return res.status(500).json({ msg: err.message });
     }
