@@ -16,7 +16,7 @@ const sendEmail = async (to: string, url: string, txt: string) => {
     OAUTH_PLAYGROUND
   );
 
-  oAuth2Client.setCredentials({});
+  oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
 
   try {
     const access_token = await oAuth2Client.getAccessToken();
