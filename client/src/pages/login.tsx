@@ -5,7 +5,7 @@ import LoginPass from "../components/auth/LoginPass";
 const Login = () => {
   const [sms, setSms] = useState(false);
   return (
-    <div className="auth_page">
+    <div className="auht_page">
       <div className="auth_box">
         <h3 className="text-uppercase text-center mb-4">Login</h3>
         <LoginPass />
@@ -15,10 +15,16 @@ const Login = () => {
               Forgot password?
             </Link>
           </span>
-          <span className="col-6" onClick={() => setSms(!sms)}>
+          <span className="col-6 text-end" onClick={() => setSms(!sms)}>
             {sms ? "Sign in with Password" : "Sign in with SMS"}
           </span>
         </small>
+        <p>
+          You don't have an account?
+          <Link to="/register" style={{ color: "crimson" }}>
+            {` Register Now`}
+          </Link>
+        </p>
       </div>
     </div>
   );
